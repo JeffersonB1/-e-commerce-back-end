@@ -136,6 +136,25 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
+  Product.destroy({
+    where: {
+      id: req.params.id,
+    }
+  })
+    .then(deleteProduct => {
+      if(deleteProduct === 1) {
+        res.json({ message: `Product ${req.params.id} deleted.` })
+        res.status(200);
+      } else {
+        res.json({ message: `Product ${req.params.id} not found.` })
+        res.status(404);
+      }
+    })
+    .catch(err => {
+      console.error(`Unexpected error: ${err}`);
+      res.json({ message: `Unexpected error: ${err}` })
+      res.status(500);
+    })
 });
 
 module.exports = router;
