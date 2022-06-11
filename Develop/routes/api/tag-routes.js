@@ -85,6 +85,26 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete on tag by its `id` value
+  Tag.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  .then(deletedTag => {
+    if(deletedTag === 1){
+    res.json({message: `Tag with ID: ${req.params.id} has successfully been deleted`})
+        .status(200);
+        } else {
+        res.json({message: `Tag with ID: ${req.params.id} not found`})
+        .status(404);
+        }
+    
+  })
+    .catch(err => {
+      console.error(`Unexpected error encountered in delete tag route ${err}`);
+      res.status(500);
+  })
+
 });
 
 module.exports = router;
