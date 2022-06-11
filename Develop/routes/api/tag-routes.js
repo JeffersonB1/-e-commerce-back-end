@@ -52,6 +52,17 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new tag
+  Tag.create({
+    tag_name: req.body.tag_name
+  })
+  .then(newTag => {
+    res.json(newTag)
+    .status(200);
+  })
+  .catch(err => {
+    console.error(`Unexpected error: ${err}`);
+    res.status(500);
+  })
 });
 
 router.put('/:id', (req, res) => {
