@@ -27,7 +27,27 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   // find a single tag by its `id`
+  Tag.findOne({
+    where: {
+      id: req.params.id
+    },
   // be sure to include its associated Product data
+  include:
+  [
+    {
+      model: Product,
+      attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
+    }
+  ]
+  })
+  .then(getTagById => {
+    res.json(getTagById)
+    .status(200);
+  })
+  .catch(err => {
+    console.error(`Unexpected error: ${err}`);
+    res.status(500);
+  })
 });
 
 router.post('/', (req, res) => {
