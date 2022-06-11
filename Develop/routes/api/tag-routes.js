@@ -67,6 +67,20 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
+  Tag.update(req.body, {
+    where: {
+      id: req.params.id
+    }
+  })
+  .then(updatedTag => {
+    res.json(updatedTag)
+    .status(200);
+  })
+  .catch(err => {
+    console.error(`Unexpected error: ${err}`);
+    res.status(500);
+  })
+
 });
 
 router.delete('/:id', (req, res) => {
