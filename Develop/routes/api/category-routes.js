@@ -27,6 +27,26 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   // find one category by its `id` value
+  Category.findOne({
+    where: {
+      id: req.params.id
+    },
+    include:
+    [
+      {
+        model: Product,
+        attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
+      }
+    ]
+  })
+  .then(getCategoryById => {
+    res.json(getCategoryById)
+    .status(200);
+  })
+  .catch(err => {
+    console.error(`Unexpected error: ${err}`);
+    res.status(500)
+  });
   // be sure to include its associated Products
 });
 
