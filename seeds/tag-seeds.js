@@ -1,5 +1,5 @@
 const { Tag } = require('../models');
-
+//const sequelize = require('../config/connection');
 const tagData = [
   {
     tag_name: 'rock music',
@@ -27,6 +27,6 @@ const tagData = [
   },
 ];
 
-const seedTags = () => Tag.bulkCreate(tagData);
+const seedTags = () => Tag.bulkCreate(tagData)
 
 module.exports = seedTags;

@@ -1,5 +1,5 @@
 const { ProductTag } = require('../models');
-
+//const sequelize = require('../config/connection');
 const productTagData = [
   {
     product_id: 1,
@@ -51,6 +51,14 @@ const productTagData = [
   },
 ];
 
-const seedProductTags = () => ProductTag.bulkCreate(productTagData);
+const seedProductTags = () => ProductTag.bulkCreate(productTagData)
+//sequelize.sync({ force: true }).then(() => {
+ // .then(() => {
+ //     console.log('product-tag created');
+ // }).catch((err) => {
+ //     console.log('failed to create product-tag');
+  //    console.log(err);
+ // })
+//});
 
 module.exports = seedProductTags;

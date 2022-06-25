@@ -1,63 +1,40 @@
 const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
+
 // The `/api/products` endpoint
 
 // get all products
 router.get('/', (req, res) => {
   // find all products
-  Product.findAll({
   // be sure to include its associated Category and Tag data
-  include: 
-  [
-    {
-      model: Category,
-      attributes: ['id', 'category_name']
-    },
-    {
-      model: Tag,
-      attributes: ['id', 'tag_name'],
-    }
-  ]
-  })
-  .then(getAllProducts => {
-    res.json(getAllProducts)
-    .status(200);
-  })  
-  .catch(err => {
-    console.error(`Unexpected error: ${err}`)
-    res.status(500);
-  })
+  Product.findAll({
+    include: [
+      Category,
+      {
+        model: Tag,
+        through: ProductTag,
+      },
+    ],
+  }).then((products) => res.json(products));
 });
 
 // get one product
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
+  // be sure to include its associated Category and Tag data
   Product.findOne({
     where: {
-      id: req.params.id
+      id: req.params.id,
     },
-  // be sure to include its associated Category and Tag data
-  include:
-  [
-    {
-      model: Category,
-      attributes: ['id', 'category_name']
-    },
-    {
-      model: Tag,
-      attributes: ['id', 'tag_name'],
-    }
-  ]
-  })
-  .then(getProductById => {
-    res.json(getProductById)
-    .status(200);
-  })  
-  .catch(err => {
-    console.error(`Unexpected error: ${err}`);
-    res.status(500);
-  })
+    include: [
+      Category,
+      {
+        model: Tag,
+        through: ProductTag,
+      },
+    ],
+  }).then((product) => res.json(product));
 });
 
 // create new product
@@ -73,7 +50,7 @@ router.post('/', (req, res) => {
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
-      if (req.body.tagIds.length) {
+      if (req.body.tagIds && req.body.tagIds.length) {
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
           return {
             product_id: product.id,
@@ -139,22 +116,21 @@ router.delete('/:id', (req, res) => {
   Product.destroy({
     where: {
       id: req.params.id,
-    }
+    },
   })
-    .then(deleteProduct => {
-      if(deleteProduct === 1) {
-        res.json({ message: `Product ${req.params.id} deleted.` })
-        res.status(200);
-      } else {
-        res.json({ message: `Product ${req.params.id} not found.` })
-        res.status(404);
+    .then((category) => {
+      if (!category) {
+        res.status(404).json({ message: "No product found with this id" });
+        return;
       }
+      res.json({message: 'This product was deleted!'});
     })
-    .catch(err => {
-      console.error(`Unexpected error: ${err}`);
-      res.json({ message: `Unexpected error: ${err}` })
-      res.status(500);
-    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
+
+
 
 module.exports = router;
