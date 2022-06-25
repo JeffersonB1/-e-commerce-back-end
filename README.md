@@ -20,4 +20,4 @@ THEN I am able to successfully create, update, and delete data in my database
 
 
 ## Video of functioning app
-https://drive.google.com/file/d/1tnocETC2SkCeDpecz114aCQ9qr0lNivl/view
+https://drive.google.com/file/d/1D6X5lDYqWNLTgjRNXC7mbwzZWOy7OxRU/view
