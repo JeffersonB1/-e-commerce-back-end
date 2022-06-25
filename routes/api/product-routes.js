@@ -19,6 +19,9 @@ router.get('/', (req, res) => {
   }).then((products) => res.json(products));
 });
 
+//------------------------------------------------------------------------------
+
+
 // get one product
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
@@ -36,6 +39,9 @@ router.get('/:id', (req, res) => {
     ],
   }).then((product) => res.json(product));
 });
+
+//-----------------------------------------------------------------------
+
 
 // create new product
 router.post('/', (req, res) => {
@@ -69,6 +75,9 @@ router.post('/', (req, res) => {
     });
 });
 
+//----------------------------------------------------------------------------
+
+
 // update product
 router.put('/:id', (req, res) => {
   // update product data
@@ -94,13 +103,13 @@ router.put('/:id', (req, res) => {
           };
         });
       // figure out which ones to remove
-      const productTagsToRemove = productTags
+      const productTagToBeRemove = productTags
         .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
         .map(({ id }) => id);
 
       // run both actions
       return Promise.all([
-        ProductTag.destroy({ where: { id: productTagsToRemove } }),
+        ProductTag.destroy({ where: { id: productTagToBeRemove } }),
         ProductTag.bulkCreate(newProductTags),
       ]);
     })
@@ -111,6 +120,8 @@ router.put('/:id', (req, res) => {
     });
 });
 
+//-------------------------------------------------------------------------
+
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
   Product.destroy({
@@ -120,10 +131,10 @@ router.delete('/:id', (req, res) => {
   })
     .then((category) => {
       if (!category) {
-        res.status(404).json({ message: "No product found with this id" });
+        res.status(404).json({ message: "The product was not found with this id" });
         return;
       }
-      res.json({message: 'This product was deleted!'});
+      res.json({message: 'The product was deleted succesfully!'});
     })
     .catch((err) => {
       console.log(err);

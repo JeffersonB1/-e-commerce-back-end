@@ -16,6 +16,9 @@ router.get('/', (req, res) => {
   }).then((tags) => res.json(tags));
 });
 
+
+//---------------------------------------------------------------------
+
 router.get('/:id', (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
@@ -32,6 +35,9 @@ router.get('/:id', (req, res) => {
   }).then((tag) => res.json(tag));
 });
 
+//-------------------------------------------------------------------
+
+
 router.post('/', (req, res) => {
   // create a new tag
   Tag.create(req.body)
@@ -41,6 +47,9 @@ router.post('/', (req, res) => {
     res.status(500).json(err);
   });
 });
+
+
+//-----------------------------------------------------------------------
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
@@ -56,6 +65,9 @@ router.put('/:id', (req, res) => {
     });
 });
 
+
+//-----------------------------------------------------------------------
+
 router.delete('/:id', (req, res) => {
   // delete on tag by its `id` value
   Tag.destroy({
@@ -65,10 +77,10 @@ router.delete('/:id', (req, res) => {
   })
     .then((tag) => {
       if (!tag) {
-        res.status(404).json({ message: "No tag found with this id" });
+        res.status(404).json({ message: "The tag was  not found with this id" });
         return;
       }
-      res.json({message: 'This tag was deleted!'});
+      res.json({message: 'The tag has been deleted!'});
     })
     .catch((err) => {
       console.log(err);
